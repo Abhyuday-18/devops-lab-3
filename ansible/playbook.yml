@@ -1,0 +1,33 @@
+---
+- name: Configure web application using Ansible
+  hosts: web
+  become: true
+
+  tasks:
+    - name: Install Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
+
+    - name: Deploy application webpage
+      ansible.builtin.copy:
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>DevOps Lab 3</title>
+          </head>
+          <body>
+              <h1>DevOps Lab 3 - Ansible Configuration is Working!</h1>
+              <p>Application configured successfully using Ansible.</p>
+          </body>
+          </html>
+        dest: /var/www/html/index.html
+        mode: '0644'
+
+    - name: Ensure Nginx is running
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
